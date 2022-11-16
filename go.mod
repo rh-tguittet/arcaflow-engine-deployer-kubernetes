@@ -1,4 +1,4 @@
-module go.flow.arcalot.io/deployer-kubernetes
+module go.flow.arcalot.io/kubernetesdeployer
 
 go 1.18
 

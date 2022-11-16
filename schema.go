@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"time"
 
-	"go.flow.arcalot.io/deployer-kubernetes/util"
+	"go.flow.arcalot.io/kubernetesdeployer/util"
 	"go.flow.arcalot.io/pluginsdk/schema"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

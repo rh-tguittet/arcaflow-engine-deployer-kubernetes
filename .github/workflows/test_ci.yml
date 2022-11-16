@@ -15,6 +15,7 @@ jobs:
         with:
           # Hard-coding version due to this bug: https://github.com/golangci/golangci-lint-action/issues/535
           version: v1.47
+          args: --timeout=3m
   test:
     name: go test
     runs-on: ubuntu-latest

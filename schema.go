@@ -358,7 +358,7 @@ var containerImagePullPolicyProperty = schema.NewPropertySchema(
 	schema.PointerTo(`"IfNotPresent"`),
 	nil,
 ).TreatEmptyAsDefaultValue()
-var containerSecurityContextPorperty = schema.NewPropertySchema(
+var containerSecurityContextProperty = schema.NewPropertySchema(
 	schema.NewStructMappedObjectSchema[*v1.SecurityContext](
 		"SecurityContext",
 		map[string]*schema.PropertySchema{
@@ -911,7 +911,7 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 						"volumeMounts":    containerVolumeMountsProperty,
 						"volumeDevices":   containerVolumeDevicesProperty,
 						"imagePullPolicy": containerImagePullPolicyProperty,
-						"securityContext": containerSecurityContextPorperty,
+						"securityContext": containerSecurityContextProperty,
 					},
 				),
 				schema.NewDisplayValue(
@@ -945,7 +945,7 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 			"volumeMounts":    containerVolumeMountsProperty,
 			"volumeDevices":   containerVolumeDevicesProperty,
 			"imagePullPolicy": containerImagePullPolicyProperty,
-			"securityContext": containerSecurityContextPorperty,
+			"securityContext": containerSecurityContextProperty,
 		},
 	),
 	// endregion

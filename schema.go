@@ -886,6 +886,27 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 				nil,
 				nil,
 			),
+			"nodeSelector": schema.NewPropertySchema(
+				schema.NewMapSchema(
+					labelName,
+					labelValue,
+					nil,
+					nil,
+				),
+				schema.NewDisplayValue(
+					schema.PointerTo("Labels"),
+					schema.PointerTo(
+						"Node labels you want the target node to have.",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
 			"pluginContainer": schema.NewPropertySchema(
 				schema.NewStructMappedObjectSchema[v1.Container](
 					"Plugin container",

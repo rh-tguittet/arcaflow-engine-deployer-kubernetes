@@ -28,6 +28,186 @@ var containerNameProperty = schema.NewPropertySchema(
 	nil,
 	nil,
 )
+var keyProperty = schema.NewPropertySchema(
+	key,
+	schema.NewDisplayValue(
+		schema.PointerTo("Key"),
+		schema.PointerTo(
+			"Key for the label that the system uses to denote the domain.",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
+var operatorProperty = schema.NewPropertySchema(
+	operator,
+	schema.NewDisplayValue(
+		schema.PointerTo("Operator"),
+		schema.PointerTo(
+			`Logical operator for Kubernetes to use when interpreting the rules.
+			 You can use In, NotIn, Exists, DoesNotExist, Gt and Lt.`,
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
+var valuesProperty = schema.NewPropertySchema(
+	schema.NewListSchema(
+		value,
+		schema.IntPointer(1),
+		nil,
+	),
+	schema.NewDisplayValue(
+		schema.PointerTo("Values"),
+		schema.PointerTo(
+			"Values for the label that the system uses to denote the domain.",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
+var matchExpressionProperty = schema.NewPropertySchema(
+	schema.NewListSchema(
+		schema.NewStructMappedObjectSchema[metav1.LabelSelectorRequirement](
+			"MatchExpression",
+			map[string]*schema.PropertySchema{
+				"key":      keyProperty,
+				"operator": operatorProperty,
+				"values":   valuesProperty,
+			},
+		),
+		schema.IntPointer(1),
+		nil,
+	),
+	schema.NewDisplayValue(
+		schema.PointerTo("MatchExpression"),
+		schema.PointerTo(
+			"Expression for the label selector.",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
+var matchExpressionsProperty = schema.NewPropertySchema(
+	schema.NewStructMappedObjectSchema[metav1.LabelSelector](
+		"MatchExpressions",
+		map[string]*schema.PropertySchema{
+			"matchExpressions": matchExpressionProperty,
+		},
+	),
+	schema.NewDisplayValue(
+		schema.PointerTo("MatchExpressions"),
+		schema.PointerTo(
+			"Expressions for the label selector.",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
+var topologyKeyProperty = schema.NewPropertySchema(
+	topologyKey,
+	schema.NewDisplayValue(
+		schema.PointerTo("TopologyKey"),
+		schema.PointerTo(
+			"Key for the node label that the system uses to denote the domain.",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
+var requiredDuringSchedulingIgnoredDuringExecutionElementProperty = schema.NewPropertySchema(
+	schema.NewStructMappedObjectSchema[v1.PodAffinityTerm](
+		"LabelSelector",
+		map[string]*schema.PropertySchema{
+			"labelSelector": matchExpressionsProperty,
+			"topologyKey":   topologyKeyProperty,
+		},
+	),
+	schema.NewDisplayValue(
+		schema.PointerTo("RequiredDuringSchedulingIgnoredDuringExecutionElement"),
+		schema.PointerTo(
+			"Hard pod affinity rule.",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
+var requiredDuringSchedulingIgnoredDuringExecutionProperty = schema.NewPropertySchema(
+	schema.NewListSchema(
+		requiredDuringSchedulingIgnoredDuringExecutionElementProperty,
+		schema.IntPointer(1),
+		nil,
+	),
+	schema.NewDisplayValue(
+		schema.PointerTo("Required During Scheduling Ignored During Execution"),
+		schema.PointerTo(
+			"Hard pod affinity rules.",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
+var podAffinityProperty = schema.NewPropertySchema(
+	schema.NewStructMappedObjectSchema[v1.PodAffinity](
+		"RequiredDuringSchedulingIgnoredDuringExecution",
+		map[string]*schema.PropertySchema{
+			"requiredDuringSchedulingIgnoredDuringExecution": requiredDuringSchedulingIgnoredDuringExecutionProperty,
+		},
+	),
+	schema.NewDisplayValue(
+		schema.PointerTo("Pod Affinity"),
+		schema.PointerTo(
+			"The pod affinity rules.",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
 var containerImageProperty = schema.NewPropertySchema(
 	imageTag,
 	schema.NewDisplayValue(
@@ -897,6 +1077,28 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 					schema.PointerTo("Labels"),
 					schema.PointerTo(
 						"Node labels you want the target node to have.",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"affinity": schema.NewPropertySchema(
+				schema.NewStructMappedObjectSchema[v1.Affinity](
+					"PodAffinity",
+					map[string]*schema.PropertySchema{
+						"podAffinity":     podAffinityProperty,
+						"podAntiAffinity": podAffinityProperty,
+					},
+				),
+				schema.NewDisplayValue(
+					schema.PointerTo("Affinity rules"),
+					schema.PointerTo(
+						"Affinity rules.",
 					),
 					nil,
 				),
@@ -1787,4 +1989,24 @@ var dnsSubdomainName = schema.NewStringSchema(
 	nil,
 	schema.IntPointer(253),
 	regexp.MustCompile(`^[a-z0-9]($|[a-z0-9\-_]*[a-z0-9])$`),
+)
+var operator = schema.NewStringSchema(
+	nil,
+	schema.IntPointer(253),
+	regexp.MustCompile(`In|NotIn|Exists|DoesNotExist|Gt|Lt`),
+)
+var key = schema.NewStringSchema(
+	nil,
+	schema.IntPointer(63),
+	regexp.MustCompile(`^(|[a-zA-Z0-9]+(|[-_.][a-zA-Z0-9]+)*[a-zA-Z0-9])$`),
+)
+var value = schema.NewStringSchema(
+	nil,
+	schema.IntPointer(63),
+	regexp.MustCompile(`^(|[a-zA-Z0-9]+(|[-_.][a-zA-Z0-9]+)*[a-zA-Z0-9])$`),
+)
+var topologyKey = schema.NewStringSchema(
+	nil,
+	schema.IntPointer(63),
+	regexp.MustCompile(`^(|[a-zA-Z0-9]+(|[-_./][a-zA-Z0-9]+)*[a-zA-Z0-9])$`),
 )

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"go.arcalot.io/log"
+	log "go.arcalot.io/log/v2"
 	"go.flow.arcalot.io/deployer"
 	core "k8s.io/api/core/v1"
 	kubeErrors "k8s.io/apimachinery/pkg/api/errors"

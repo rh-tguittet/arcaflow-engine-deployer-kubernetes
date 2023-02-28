@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"go.arcalot.io/assert"
-	"go.arcalot.io/log"
+	log "go.arcalot.io/log/v2"
 	kubernetes "go.flow.arcalot.io/kubernetesdeployer"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/tools/clientcmd"

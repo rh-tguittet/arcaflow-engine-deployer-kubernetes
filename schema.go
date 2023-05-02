@@ -979,7 +979,7 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 				schema.NewDisplayValue(
 					schema.PointerTo("Labels"),
 					schema.PointerTo(
-						"Kubernetes labels to appy. See https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ for details.",
+						"Kubernetes labels to apply. See https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ for details.",
 					),
 					nil,
 				),
@@ -1000,7 +1000,7 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 				schema.NewDisplayValue(
 					schema.PointerTo("Annotations"),
 					schema.PointerTo(
-						"Kubernetes annotations to appy. See https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ for details.",
+						"Kubernetes annotations to apply. See https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ for details.",
 					),
 					nil,
 				),
@@ -1145,6 +1145,45 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 					nil,
 				),
 				true,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"imagePullSecrets": schema.NewPropertySchema(
+				schema.NewListSchema(
+					schema.NewStructMappedObjectSchema[v1.LocalObjectReference](
+						"imagePullSecrets",
+						map[string]*schema.PropertySchema{
+							"name": schema.NewPropertySchema(
+								schema.NewStringSchema(nil, nil, nil),
+								schema.NewDisplayValue(
+									schema.PointerTo("Name"),
+									schema.PointerTo(
+										"The name of the secret containing registry docker auth configs.",
+									),
+									nil,
+								),
+								false,
+								nil,
+								nil,
+								nil,
+								nil,
+								nil,
+							),
+						},
+					),
+					nil,
+					nil,
+				),
+				schema.NewDisplayValue(
+					schema.PointerTo("imagePullSecrets"),
+					schema.PointerTo("A list of secret names within the same namespace as the pod, to be used"+
+						"for authentication against container registries to pull private images"),
+					nil,
+				),
+				false,
 				nil,
 				nil,
 				nil,

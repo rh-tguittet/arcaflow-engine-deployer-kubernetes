@@ -63,7 +63,7 @@ func TestLabelName(t *testing.T) {
 }
 
 func TestLabelValue(t *testing.T) {
-	for _, item := range []any{"", "kubernetes.io_test", "test"} {
+	for _, item := range []any{"", "kubernetes.io_test", "test-1-0"} {
 		t.Run(item.(string), func(t *testing.T) {
 			unserializedData, err := labelValue.Unserialize(item)
 			assert.NoError(t, err)

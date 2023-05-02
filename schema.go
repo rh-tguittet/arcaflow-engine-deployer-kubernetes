@@ -1983,7 +1983,7 @@ var labelName = schema.NewStringSchema(
 var labelValue = schema.NewStringSchema(
 	nil,
 	schema.IntPointer(63),
-	regexp.MustCompile(`^(|[a-zA-Z0-9]+(|[-_.][a-zA-Z0-9]+)*[a-zA-Z0-9])$`),
+	regexp.MustCompile(`^$|^([a-zA-Z0-9]+[-._]*)+$`),
 )
 var dnsSubdomainName = schema.NewStringSchema(
 	nil,

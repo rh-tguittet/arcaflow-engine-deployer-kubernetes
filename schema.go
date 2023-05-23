@@ -525,9 +525,9 @@ var containerImagePullPolicyProperty = schema.NewPropertySchema(
 		},
 	),
 	schema.NewDisplayValue(
-		schema.PointerTo("Volume device"),
+		schema.PointerTo("Image Pull Policy"),
 		schema.PointerTo(
-			"Mount a raw block device within the container.",
+			"describes a policy for if/when to pull a container image",
 		),
 		nil,
 	),
@@ -538,10 +538,249 @@ var containerImagePullPolicyProperty = schema.NewPropertySchema(
 	schema.PointerTo(`"IfNotPresent"`),
 	nil,
 ).TreatEmptyAsDefaultValue()
+
+var seccompTypeProperty = schema.NewPropertySchema(
+	schema.NewStringEnumSchema(
+		map[string]*schema.DisplayValue{
+			string(v1.SeccompProfileTypeUnconfined): {NameValue: schema.PointerTo("Unconfined"),
+				DescriptionValue: schema.PointerTo("indicates no seccomp profile is applied (A.K.A. unconfined)")},
+			string(v1.SeccompProfileTypeRuntimeDefault): {NameValue: schema.PointerTo("RuntimeDefault"),
+				DescriptionValue: schema.PointerTo("represents the default container runtime seccomp profile.")},
+			string(v1.SeccompProfileTypeLocalhost): {NameValue: schema.PointerTo("Localhost"),
+				DescriptionValue: schema.PointerTo("indicates a profile defined in a file on the node should be used.")},
+		},
+	),
+	schema.NewDisplayValue(
+		schema.PointerTo("Seccomp Type"),
+		schema.PointerTo(
+			"indicates which kind of seccomp profile will be applied.",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	schema.PointerTo(`"RuntimeDefault"`),
+	nil,
+).TreatEmptyAsDefaultValue()
+
+var podSecurityContextProperty = schema.NewPropertySchema(
+	schema.NewStructMappedObjectSchema[*v1.PodSecurityContext](
+		"PodSecurityContext",
+		map[string]*schema.PropertySchema{
+			"runAsNonRoot": schema.NewPropertySchema(
+				schema.NewBoolSchema(),
+				schema.NewDisplayValue(
+					schema.PointerTo("RunAsNonRoot"),
+					schema.PointerTo(
+						"Run a container as root or non root user.",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"runAsUser": schema.NewPropertySchema(
+				schema.NewIntSchema(schema.IntPointer(0), schema.IntPointer(60000), nil),
+				schema.NewDisplayValue(
+					schema.PointerTo("RunAsUser"),
+					schema.PointerTo(
+						"The UID to run the entrypoint of the container process.",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"runAsGroup": schema.NewPropertySchema(
+				schema.NewIntSchema(schema.IntPointer(0), schema.IntPointer(60000), nil),
+				schema.NewDisplayValue(
+					schema.PointerTo("RunAsGroup"),
+					schema.PointerTo(
+						"The GID to run the entrypoint of the container process..",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"fsGroup": schema.NewPropertySchema(
+				schema.NewIntSchema(schema.IntPointer(0), schema.IntPointer(60000), nil),
+				schema.NewDisplayValue(
+					schema.PointerTo("FsGroup"),
+					schema.PointerTo(
+						"A special supplemental group that applies to all containers in a pod."+
+							"Some volume types allow the Kubelet to change the "+
+							"ownership of that volume to be owned by the pod:",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"seccompProfile": schema.NewPropertySchema(
+				schema.NewStructMappedObjectSchema[v1.SeccompProfile](
+					"SeccompProfile",
+					map[string]*schema.PropertySchema{
+						"type": seccompTypeProperty,
+					},
+				),
+				schema.NewDisplayValue(
+					schema.PointerTo("SeccompProfile"),
+					schema.PointerTo(
+						"The seccomp options to use by this container. If seccomp options are provided "+
+							"at both the pod & container level, the container options override the pod options.",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+		},
+	),
+	schema.NewDisplayValue(
+		schema.PointerTo("Pod Security Context"),
+		schema.PointerTo(
+			"PodSecurityContext holds pod-level security attributes and common container settings.",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
+
 var containerSecurityContextProperty = schema.NewPropertySchema(
 	schema.NewStructMappedObjectSchema[*v1.SecurityContext](
 		"SecurityContext",
 		map[string]*schema.PropertySchema{
+			"runAsNonRoot": schema.NewPropertySchema(
+				schema.NewBoolSchema(),
+				schema.NewDisplayValue(
+					schema.PointerTo("RunAsNonRoot"),
+					schema.PointerTo(
+						"Run a container as root or non root user.",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"runAsUser": schema.NewPropertySchema(
+				schema.NewIntSchema(schema.IntPointer(0), schema.IntPointer(60000), nil),
+				schema.NewDisplayValue(
+					schema.PointerTo("RunAsUser"),
+					schema.PointerTo(
+						"The UID to run the entrypoint of the container process.",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"runAsGroup": schema.NewPropertySchema(
+				schema.NewIntSchema(schema.IntPointer(0), schema.IntPointer(60000), nil),
+				schema.NewDisplayValue(
+					schema.PointerTo("RunAsGroup"),
+					schema.PointerTo(
+						"The GID to run the entrypoint of the container process..",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"allowPrivilegeEscalation": schema.NewPropertySchema(
+				schema.NewBoolSchema(),
+				schema.NewDisplayValue(
+					schema.PointerTo("AllowPrivilegeEscalation"),
+					schema.PointerTo(
+						"AllowPrivilegeEscalation controls whether a "+
+							"process can gain more privileges than its parent process.",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"seccompProfile": schema.NewPropertySchema(
+				schema.NewStructMappedObjectSchema[v1.SeccompProfile](
+					"SeccompProfile",
+					map[string]*schema.PropertySchema{
+						"type": seccompTypeProperty,
+					},
+				),
+				schema.NewDisplayValue(
+					schema.PointerTo("SeccompProfile"),
+					schema.PointerTo(
+						"The seccomp options to use by this container. If seccomp options are provided "+
+							"at both the pod & container level, the container options override the pod options.",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"privileged": schema.NewPropertySchema(
+				schema.NewBoolSchema(),
+				schema.NewDisplayValue(
+					schema.PointerTo("Privileged"),
+					schema.PointerTo(
+						"Run the container in privileged mode.",
+					),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
 			"capabilities": schema.NewPropertySchema(
 				schema.NewStructMappedObjectSchema[v1.Capabilities](
 					"Capabilities",
@@ -602,28 +841,12 @@ var containerSecurityContextProperty = schema.NewPropertySchema(
 				nil,
 				nil,
 			),
-			"privileged": schema.NewPropertySchema(
-				schema.NewBoolSchema(),
-				schema.NewDisplayValue(
-					schema.PointerTo("Privileged"),
-					schema.PointerTo(
-						"Run the container in privileged mode.",
-					),
-					nil,
-				),
-				false,
-				nil,
-				nil,
-				nil,
-				nil,
-				nil,
-			),
 		},
 	),
 	schema.NewDisplayValue(
-		schema.PointerTo("Volume device"),
+		schema.PointerTo("Security Context"),
 		schema.PointerTo(
-			"Mount a raw block device within the container.",
+			"SecurityContext holds security configuration that will be applied to a container.",
 		),
 		nil,
 	),
@@ -1109,6 +1332,8 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 				nil,
 				nil,
 			),
+			"securityContext": podSecurityContextProperty,
+
 			"pluginContainer": schema.NewPropertySchema(
 				schema.NewStructMappedObjectSchema[v1.Container](
 					"Plugin container",

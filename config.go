@@ -53,7 +53,6 @@ type Timeouts struct {
 // PodSpec contains the specification of the pod to launch.
 type PodSpec struct {
 	v1.PodSpec `json:",inline"`
-
 	// PluginContainer describes the container the plugin should be run in.
 	PluginContainer v1.Container `json:"pluginContainer"`
 }

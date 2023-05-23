@@ -784,7 +784,7 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 				nil,
 			),
 			"cacert": schema.NewPropertySchema(
-				schema.NewStringSchema(schema.IntPointer(1), nil, regexp.MustCompile(`^\s*-----BEGIN CERTIFICATE-----(\s*.*\s*)*-----END CERTIFICATE-----\s*$`)),
+				schema.NewStringSchema(schema.IntPointer(1), nil, regexp.MustCompile(`^\s*-----BEGIN CERTIFICATE-----(.|\n)+-----END CERTIFICATE-----\s*$`)),
 				schema.NewDisplayValue(
 					schema.PointerTo("CA certificate"),
 					schema.PointerTo("CA certificate in PEM format to verify Kubernetes server certificate against."),
@@ -800,7 +800,7 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 				},
 			),
 			"cert": schema.NewPropertySchema(
-				schema.NewStringSchema(schema.IntPointer(1), nil, regexp.MustCompile(`^\s*-----BEGIN CERTIFICATE-----(\s*.*\s*)*-----END CERTIFICATE-----\s*$`)),
+				schema.NewStringSchema(schema.IntPointer(1), nil, regexp.MustCompile(`^\s*-----BEGIN CERTIFICATE-----(.|\n)+-----END CERTIFICATE-----\s*$`)),
 				schema.NewDisplayValue(
 					schema.PointerTo("Client certificate"),
 					schema.PointerTo("Client certificate in PEM format to authenticate against Kubernetes with."),
@@ -816,7 +816,7 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 				},
 			),
 			"key": schema.NewPropertySchema(
-				schema.NewStringSchema(schema.IntPointer(1), nil, regexp.MustCompile(`^\s*-----BEGIN ([A-Z]+) PRIVATE KEY-----(\s*.*\s*)*-----END ([A-Z]+) PRIVATE KEY-----\s*$`)),
+				schema.NewStringSchema(schema.IntPointer(1), nil, regexp.MustCompile(`^\s*-----BEGIN(\s+[A-Z]+\s+|\s+)PRIVATE KEY-----(.|\n)+-----END(\s+[A-Z]+\s+|\s+)PRIVATE KEY-----\s*$`)),
 				schema.NewDisplayValue(
 					schema.PointerTo("Client key"),
 					schema.PointerTo("Client private key in PEM format to authenticate against Kubernetes with."),

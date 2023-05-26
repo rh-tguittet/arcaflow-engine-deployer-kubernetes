@@ -2046,7 +2046,116 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 	// region SecretVolumeSource
 	schema.NewStructMappedObjectSchema[v1.SecretVolumeSource](
 		"SecretVolumeSource",
-		map[string]*schema.PropertySchema{},
+		map[string]*schema.PropertySchema{
+			"secretName": schema.NewPropertySchema(
+				schema.NewStringSchema(nil, nil, nil),
+				schema.NewDisplayValue(
+					schema.PointerTo("secretName"),
+					schema.PointerTo("secretName is the name of the secret in the pod's namespace to use."+
+						" More info: https://kubernetes.io/docs/concepts/storage/volumes#secret"),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"optional": schema.NewPropertySchema(
+				schema.NewBoolSchema(),
+				schema.NewDisplayValue(
+					schema.PointerTo("Optional"),
+					schema.PointerTo("optional field specify whether the Secret or its keys must be defined."),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"items": schema.NewPropertySchema(
+				schema.NewListSchema(
+					schema.NewStructMappedObjectSchema[v1.KeyToPath](
+						"items",
+						map[string]*schema.PropertySchema{
+							"key": schema.NewPropertySchema(
+								schema.NewStringSchema(nil, nil, nil),
+								schema.NewDisplayValue(
+									schema.PointerTo("key"),
+									schema.PointerTo(
+										"key is the key to project.",
+									),
+									nil,
+								),
+								false,
+								nil,
+								nil,
+								nil,
+								nil,
+								nil,
+							),
+							"mode": schema.NewPropertySchema(
+								schema.NewStringSchema(nil, nil, nil),
+								schema.NewDisplayValue(
+									schema.PointerTo("mode"),
+									schema.PointerTo(
+										"mode is Optional: mode bits used to set permissions on this file."+
+											" Must be an octal value between 0000 and 0777 or a decimal value between"+
+											" 0 and 511. YAML accepts both octal and decimal values, JSON requires"+
+											" decimal values for mode bits. If not specified, the volume defaultMode"+
+											" will be used. This might be in conflict with other options that affect"+
+											" the file mode, like fsGroup, and the result can be other mode bits set.",
+									),
+									nil,
+								),
+								false,
+								nil,
+								nil,
+								nil,
+								nil,
+								nil,
+							),
+							"path": schema.NewPropertySchema(
+								schema.NewStringSchema(nil, nil, nil),
+								schema.NewDisplayValue(
+									schema.PointerTo("path"),
+									schema.PointerTo(
+										"path is the relative path of the file to map the key to. May not be"+
+											" an absolute path. May not contain the path element '..'. May not start"+
+											" with the string '..'.",
+									),
+									nil,
+								),
+								false,
+								nil,
+								nil,
+								nil,
+								nil,
+								nil,
+							),
+						},
+					),
+					nil,
+					nil,
+				),
+				schema.NewDisplayValue(
+					schema.PointerTo("SecretVolumeSource"),
+					schema.PointerTo("Adapts a Secret into a volume. The contents of the target Secret's Data"+
+						" field will be presented in a volume as files using the keys in the Data field as the file"+
+						" names. Secret volumes support ownership management and SELinux relabeling."),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+		},
 	),
 	// endregion
 	// region NFSVolumeSource

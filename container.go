@@ -28,3 +28,10 @@ func (c connectorContainer) Close() error {
 	}
 	return nil
 }
+
+func (c connectorContainer) ID() string {
+	if len(c.pod.Status.ContainerStatuses) > 0 {
+		return c.pod.Status.ContainerStatuses[0].ContainerID
+	}
+	return ""
+}

@@ -2,5 +2,15 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>arcalot/.github:renovate-config"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "k8s.io/api",
+        "k8s.io/apimachinery",
+        "k8s.io/client-go"
+      ],
+      "allowedVersions": "<=v0.24.9"
+    }
   ]
 }

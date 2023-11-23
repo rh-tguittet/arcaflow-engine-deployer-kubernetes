@@ -71,6 +71,7 @@ func (f factory) createConnectionConfig(config *Config) restclient.Config {
 			CertData:   []byte(config.Connection.CertData),
 			KeyData:    []byte(config.Connection.KeyData),
 			CAData:     []byte(config.Connection.CAData),
+			Insecure:   config.Connection.Insecure,
 		},
 		UserAgent: "Arcaflow",
 		QPS:       float32(config.Connection.QPS),

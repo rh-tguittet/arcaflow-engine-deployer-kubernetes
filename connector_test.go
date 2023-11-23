@@ -118,6 +118,7 @@ func getConfigStruct(t *testing.T) kubernetes.Config {
 			Username:    kubeconfig.Username,
 			Password:    kubeconfig.Password,
 			ServerName:  kubeconfig.ServerName,
+			Insecure:    kubeconfig.Insecure,
 			CertData:    string(kubeconfig.CertData),
 			KeyData:     string(kubeconfig.KeyData),
 			CAData:      string(kubeconfig.CAData),

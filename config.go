@@ -35,8 +35,9 @@ type Connection struct {
 
 	BearerToken string `json:"bearerToken,omitempty" yaml:"bearerToken,omitempty"`
 
-	QPS   float64 `json:"qps,omitempty" yaml:"qps,omitempty"`
-	Burst int64   `json:"burst,omitempty" yaml:"burst,omitempty"`
+	QPS      float64 `json:"qps,omitempty" yaml:"qps,omitempty"`
+	Burst    int64   `json:"burst,omitempty" yaml:"burst,omitempty"`
+	Insecure bool    `json:"insecure,omitempty" yaml:"insecure,omitempty"`
 }
 
 // Pod describes the pod to launch.

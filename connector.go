@@ -53,7 +53,9 @@ func (c connector) Deploy(ctx context.Context, image string) (deployer.Plugin, e
 	if meta.Name == "" && meta.GenerateName == "" {
 		meta.GenerateName = "arcaflow-plugin-"
 	}
-
+	if c.config.Connection.Insecure {
+		c.logger.Warningf("Deploying without TLS verification, do it at your own risk.")
+	}
 	c.logger.Infof("Deploying pod from image %s...", image)
 	pod, err := c.cli.CoreV1().Pods(c.config.Pod.Metadata.Namespace).Create(
 		ctx,

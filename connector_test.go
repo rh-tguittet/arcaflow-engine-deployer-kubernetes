@@ -111,6 +111,24 @@ func getConfigStruct(t *testing.T) kubernetes.Config {
 		t.Skipf("Skipping test, load kubeconfig file from user home directory (%v)", err)
 	}
 
+	var certData *string
+	var keyData *string
+	var caData *string
+	if kubeconfig.CertData != nil {
+		certDataStr := string(kubeconfig.CertData)
+		certData = &certDataStr
+	}
+
+	if kubeconfig.KeyData != nil {
+		keyDataStr := string(kubeconfig.KeyData)
+		keyData = &keyDataStr
+	}
+
+	if kubeconfig.CAData != nil {
+		caDataStr := string(kubeconfig.CAData)
+		caData = &caDataStr
+	}
+
 	configStruct := kubernetes.Config{
 		Connection: kubernetes.Connection{
 			Host:        kubeconfig.Host,
@@ -119,9 +137,9 @@ func getConfigStruct(t *testing.T) kubernetes.Config {
 			Password:    kubeconfig.Password,
 			ServerName:  kubeconfig.ServerName,
 			Insecure:    kubeconfig.Insecure,
-			CertData:    string(kubeconfig.CertData),
-			KeyData:     string(kubeconfig.KeyData),
-			CAData:      string(kubeconfig.CAData),
+			CertData:    certData,
+			KeyData:     keyData,
+			CAData:      caData,
 			BearerToken: kubeconfig.BearerToken,
 			QPS:         float64(kubeconfig.QPS),
 			Burst:       int64(kubeconfig.Burst),

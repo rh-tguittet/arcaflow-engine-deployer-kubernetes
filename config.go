@@ -29,9 +29,9 @@ type Connection struct {
 
 	ServerName string `json:"serverName,omitempty" yaml:"serverName,omitempty"`
 
-	CertData string `json:"cert,omitempty" yaml:"cert,omitempty"`
-	KeyData  string `json:"key,omitempty" yaml:"key,omitempty"`
-	CAData   string `json:"cacert,omitempty" yaml:"cacert,omitempty"`
+	CertData *string `json:"cert,omitempty" yaml:"cert,omitempty"`
+	KeyData  *string `json:"key,omitempty" yaml:"key,omitempty"`
+	CAData   *string `json:"cacert,omitempty" yaml:"cacert,omitempty"`
 
 	BearerToken string `json:"bearerToken,omitempty" yaml:"bearerToken,omitempty"`
 

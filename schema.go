@@ -1104,6 +1104,20 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 				schema.PointerTo(`10`),
 				nil,
 			).TreatEmptyAsDefaultValue(),
+			"insecure": schema.NewPropertySchema(
+				schema.NewBoolSchema(),
+				schema.NewDisplayValue(
+					schema.PointerTo("Insecure Connection"),
+					schema.PointerTo("Skip TLS certificate validation"),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			).TreatEmptyAsDefaultValue(),
 		},
 	),
 	// endregion

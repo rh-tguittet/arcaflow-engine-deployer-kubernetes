@@ -55,6 +55,18 @@ func (f factory) Create(config *Config, logger log.Logger) (deployer.Connector, 
 }
 
 func (f factory) createConnectionConfig(config *Config) restclient.Config {
+	caData := []byte("")
+	keyData := []byte("")
+	certData := []byte("")
+	if config.Connection.CAData != nil {
+		caData = []byte(*config.Connection.CAData)
+	}
+	if config.Connection.KeyData != nil {
+		keyData = []byte(*config.Connection.KeyData)
+	}
+	if config.Connection.CertData != nil {
+		certData = []byte(*config.Connection.CertData)
+	}
 	return restclient.Config{
 		Host:    config.Connection.Host,
 		APIPath: config.Connection.APIPath,
@@ -68,9 +80,10 @@ func (f factory) createConnectionConfig(config *Config) restclient.Config {
 		Impersonate: restclient.ImpersonationConfig{},
 		TLSClientConfig: restclient.TLSClientConfig{
 			ServerName: config.Connection.ServerName,
-			CertData:   []byte(config.Connection.CertData),
-			KeyData:    []byte(config.Connection.KeyData),
-			CAData:     []byte(config.Connection.CAData),
+			CertData:   certData,
+			KeyData:    keyData,
+			CAData:     caData,
+			Insecure:   config.Connection.Insecure,
 		},
 		UserAgent: "Arcaflow",
 		QPS:       float32(config.Connection.QPS),

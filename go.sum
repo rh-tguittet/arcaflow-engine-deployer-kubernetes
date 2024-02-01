@@ -140,12 +140,12 @@ github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9dec
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 go.arcalot.io/assert v1.7.0 h1:PTLyeisNMUKpM9wXRDxResanBhuGOYO1xFK3v5b3FSw=
 go.arcalot.io/assert v1.7.0/go.mod h1:nNmWPoNUHFyrPkNrD2aASm5yPuAfiWdB/4X7Lw3ykHk=
-go.arcalot.io/lang v1.0.0 h1:mgDaieT4wWdZTnR4V7+/pgYRmzfU7VZZgIzHccuxAbY=
-go.arcalot.io/lang v1.0.0/go.mod h1:ALqfYEhAzC2WoGLaycmJoNJd5NmkR7V1PSKp/c5D278=
+go.arcalot.io/lang v1.1.0 h1:ugglRKpd3qIMkdghAjKJxsziIgHm8QpxrzZPSXoa08I=
+go.arcalot.io/lang v1.1.0/go.mod h1:2BZJO4csY7NnN/Nf1+eTdIQH4A2vxtOMneaO+PJl+Co=
 go.arcalot.io/log/v2 v2.1.0 h1:lNO931hJ82LgS6WcCFCxpLWXQXPFhOkz6PyAJ/augq4=
 go.arcalot.io/log/v2 v2.1.0/go.mod h1:PNWOSkkPmgS2OMlWTIlB/WqOw0yaBvDYd8ENAP80H4k=
-go.flow.arcalot.io/deployer v0.4.0 h1:5YveLCX+zc8Ra/aukHOwD5OrJD2W8WRzoruf3bpJfqY=
-go.flow.arcalot.io/deployer v0.4.0/go.mod h1:x6gsz/hANR8qN1nerpyY3vXpdaqofDH5Wlg+Nsqg/x0=
+go.flow.arcalot.io/deployer v0.5.0 h1:yXYogvL3shNBEEoTx9U9CNbfxuf8777uAH5Vn3hv1Yo=
+go.flow.arcalot.io/deployer v0.5.0/go.mod h1:whj8wOUursCnfZCt1a7eY5hU3EyOcUG48vM4NeAe5N8=
 go.flow.arcalot.io/pluginsdk v0.8.0 h1:cShsshrR17ZFLcbgi3aZvqexLttcp3JISFNqPUPuDvA=
 go.flow.arcalot.io/pluginsdk v0.8.0/go.mod h1:sk7ssInR/T+Gy+RSRr+QhKqZcECFFxMyn1hPQCTZSyU=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=

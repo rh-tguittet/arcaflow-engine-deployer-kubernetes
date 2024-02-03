@@ -107,7 +107,8 @@ func (c connector) Deploy(ctx context.Context, image string) (deployer.Plugin, e
 			_ = stdoutWriter.Close()
 			_ = stdinWriter.Close()
 		}()
-		_ = podExec.Stream(
+		_ = podExec.StreamWithContext(
+			ctx,
 			remotecommand.StreamOptions{
 				Stdin:  stdinReader,
 				Stdout: stdoutWriter,

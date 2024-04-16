@@ -8,3 +8,5 @@ jobs:
   lint_and_test:
     name: lint and test
     uses: arcalot/arcaflow-reusable-workflows/.github/workflows/go_lint_and_test.yaml@main
+    with:
+      go_version: ${{ vars.ARCALOT_GO_VERSION }}

@@ -2193,7 +2193,39 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 	// region PersistentVolumeClaimVolumeSource
 	schema.NewStructMappedObjectSchema[v1.PersistentVolumeClaimVolumeSource](
 		"PersistentVolumeClaimVolumeSource",
-		map[string]*schema.PropertySchema{},
+		map[string]*schema.PropertySchema{
+			"claimName": schema.NewPropertySchema(
+				dnsSubdomainName,
+				schema.NewDisplayValue(
+					schema.PointerTo("claimName"),
+					schema.PointerTo(
+						"claimName is the name of a PersistentVolumeClaim in the same namespace "+
+							"as the pod using this volume.",
+					),
+					nil,
+				),
+				true,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+			"readOnly": schema.NewPropertySchema(
+				schema.NewBoolSchema(),
+				schema.NewDisplayValue(
+					schema.PointerTo("readOnly"),
+					schema.PointerTo("readOnly Will force the ReadOnly setting in VolumeMounts."),
+					nil,
+				),
+				false,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			),
+		},
 	),
 	// endregion
 	// region RBDVolumeSource

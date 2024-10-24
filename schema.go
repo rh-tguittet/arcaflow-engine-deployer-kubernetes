@@ -1,6 +1,7 @@
 package kubernetes
 
 import (
+	"k8s.io/apimachinery/pkg/api/resource"
 	"regexp"
 	"time"
 
@@ -2530,8 +2531,23 @@ var resourceName = schema.NewStringSchema(
 	nil,
 	regexp.MustCompile(`^(cpu|memory)$`),
 )
-var resourceQuantity = schema.NewStringSchema(
-	nil,
-	nil,
-	regexp.MustCompile(`^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$`),
+
+var resourceQuantity = schema.NewStructMappedObjectSchema[resource.Quantity](
+	"Resource Quantity",
+	map[string]*schema.PropertySchema{
+		"Format": schema.NewPropertySchema(
+			schema.NewStringSchema(nil, nil, regexp.MustCompile(`^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$`)),
+			schema.NewDisplayValue(
+				schema.PointerTo("Format"),
+				schema.PointerTo("Change Format at will. See the comment for Canonicalize for more details."),
+				nil,
+			),
+			false,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+		),
+	},
 )

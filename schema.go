@@ -858,6 +858,83 @@ var containerSecurityContextProperty = schema.NewPropertySchema(
 	nil,
 )
 
+var resourceListTypeProperty = schema.NewPropertySchema(
+	// Validation failed for 'pod' -> 'spec' -> 'pluginContainer' -> 'resources' -> 'limits': Field cannot be set (reflect.Value.Convert: value of type map[string]string cannot be converted to type v1.ResourceList)
+	schema.NewMapSchema(resourceName, resourceQuantity, nil, nil),
+
+	// This complains at runtime that v1.ResourceList isn't a struct (which it isn't)
+	//schema.NewStructMappedObjectSchema[v1.ResourceList](
+	//	"ResourceList",
+	//	map[string]*schema.PropertySchema{
+	//		"cpu": schema.NewPropertySchema(
+	//			resourceQuantity,
+	//			schema.NewDisplayValue(
+	//				schema.PointerTo("Cpu"),
+	//				schema.PointerTo("Cpu limit"),
+	//				nil,
+	//			),
+	//			false,
+	//			nil,
+	//			nil,
+	//			nil,
+	//			nil,
+	//			nil,
+	//		),
+	//		"memory": schema.NewPropertySchema(
+	//			resourceQuantity,
+	//			schema.NewDisplayValue(
+	//				schema.PointerTo("Memory"),
+	//				schema.PointerTo("Memory limit"),
+	//				nil,
+	//			),
+	//			false,
+	//			nil,
+	//			nil,
+	//			nil,
+	//			nil,
+	//			nil,
+	//		),
+	//	},
+	//),
+	schema.NewDisplayValue(
+		schema.PointerTo("ResourceList"),
+		schema.PointerTo(
+			"Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
+
+var containerResourcesProperty = schema.NewPropertySchema(
+	schema.NewStructMappedObjectSchema[v1.ResourceRequirements](
+		"Resource Requirements",
+		map[string]*schema.PropertySchema{
+			"limits":   resourceListTypeProperty,
+			"requests": resourceListTypeProperty,
+			//"claims":   nil, // TODO this is pretty involved: https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/#api
+		},
+	),
+	schema.NewDisplayValue(
+		schema.PointerTo("Resource Requirements"),
+		schema.PointerTo(
+			"Compute Resources required by this container. Cannot be updated. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/.",
+		),
+		nil,
+	),
+	false,
+	nil,
+	nil,
+	nil,
+	nil,
+	nil,
+)
+
 // endregion
 
 // Schema describes the schema for Kubernetes deployments.
@@ -1374,6 +1451,7 @@ var Schema = schema.NewTypedScopeSchema[*Config](
 						"volumeDevices":   containerVolumeDevicesProperty,
 						"imagePullPolicy": containerImagePullPolicyProperty,
 						"securityContext": containerSecurityContextProperty,
+						"resources":       containerResourcesProperty,
 					},
 				),
 				schema.NewDisplayValue(
@@ -2428,4 +2506,32 @@ var topologyKey = schema.NewStringSchema(
 	nil,
 	schema.IntPointer(63),
 	regexp.MustCompile(`^(|[a-zA-Z0-9]+(|[-_./][a-zA-Z0-9]+)*[a-zA-Z0-9])$`),
+)
+
+var resourceRequirementName = schema.NewStringEnumSchema(
+	map[string]*schema.DisplayValue{
+		"limits": {
+			NameValue: schema.PointerTo("Limimts"),
+			DescriptionValue: schema.PointerTo("Limits describes the maximum amount of compute resources allowed." +
+				"More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"),
+		},
+		"requests": {
+			NameValue: schema.PointerTo("Requsets"),
+			DescriptionValue: schema.PointerTo("Requests describes the minimum amount of compute resources required." +
+				"If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise " +
+				"to an implementation-defined value. Requests cannot exceed Limits." +
+				"More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"),
+		},
+		// TODO "claims" but it's more involved
+	},
+)
+var resourceName = schema.NewStringSchema(
+	nil,
+	nil,
+	regexp.MustCompile(`^(cpu|memory)$`),
+)
+var resourceQuantity = schema.NewStringSchema(
+	nil,
+	nil,
+	regexp.MustCompile(`^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$`),
 )

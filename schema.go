@@ -914,7 +914,7 @@ var resourceListTypeProperty = schema.NewPropertySchema(
 
 var containerResourcesProperty = schema.NewPropertySchema(
 	schema.NewStructMappedObjectSchema[v1.ResourceRequirements](
-		"Resource Requirements",
+		"ResourceRequirements",
 		map[string]*schema.PropertySchema{
 			"limits":   resourceListTypeProperty,
 			"requests": resourceListTypeProperty,
@@ -2512,12 +2512,12 @@ var topologyKey = schema.NewStringSchema(
 var resourceRequirementName = schema.NewStringEnumSchema(
 	map[string]*schema.DisplayValue{
 		"limits": {
-			NameValue: schema.PointerTo("Limimts"),
+			NameValue: schema.PointerTo("Limits"),
 			DescriptionValue: schema.PointerTo("Limits describes the maximum amount of compute resources allowed." +
 				"More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"),
 		},
 		"requests": {
-			NameValue: schema.PointerTo("Requsets"),
+			NameValue: schema.PointerTo("Requests"),
 			DescriptionValue: schema.PointerTo("Requests describes the minimum amount of compute resources required." +
 				"If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise " +
 				"to an implementation-defined value. Requests cannot exceed Limits." +
@@ -2526,10 +2526,29 @@ var resourceRequirementName = schema.NewStringEnumSchema(
 		// TODO "claims" but it's more involved
 	},
 )
-var resourceName = schema.NewStringSchema(
-	nil,
-	nil,
-	regexp.MustCompile(`^(cpu|memory)$`),
+var resourceName = schema.NewTypedStringEnumSchema[v1.ResourceName](
+	map[v1.ResourceName]*schema.DisplayValue{
+		v1.ResourceCPU: schema.NewDisplayValue(
+			schema.PointerTo("cpu"),
+			schema.PointerTo("CPU, in cores. (500m = .5 cores)"),
+			nil,
+		),
+		v1.ResourceMemory: schema.NewDisplayValue(
+			schema.PointerTo("memory"),
+			schema.PointerTo("Memory, in bytes. (500Gi = 500GiB = 500 * 1024 * 1024 * 1024)"),
+			nil,
+		),
+		v1.ResourceStorage: schema.NewDisplayValue(
+			schema.PointerTo("storage"),
+			schema.PointerTo("Volume size, in bytes (e,g. 5Gi = 5GiB = 5 * 1024 * 1024 * 1024)"),
+			nil,
+		),
+		v1.ResourceEphemeralStorage: schema.NewDisplayValue(
+			schema.PointerTo("ephemeral-storage"),
+			schema.PointerTo("Local ephemeral storage, in bytes. (500Gi = 500GiB = 500 * 1024 * 1024 * 1024)"),
+			nil,
+		),
+	},
 )
 
 var resourceQuantity = schema.NewStructMappedObjectSchema[resource.Quantity](

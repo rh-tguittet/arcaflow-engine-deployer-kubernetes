@@ -3,6 +3,7 @@ import (
 	"testing"
 
 	"go.arcalot.io/assert"
+	"k8s.io/apimachinery/pkg/api/resource"
 )
 
 func TestIdentifier(t *testing.T) {
@@ -98,4 +99,23 @@ func TestDNSSubdomainName(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestResourceQuantity(t *testing.T) {
+	for _, item := range []any{"200m", "1Gi", "-200Mi"} {
+		t.Run(item.(string), func(t *testing.T) {
+			unserializedData, err := resourceQuantity.Unserialize(item)
+			unserializedQuantity := unserializedData.(resource.Quantity)
+			assert.NoError(t, err)
+			assert.Equals(t, unserializedQuantity.String(), item.(string))
+		})
+	}
+
+	item := "2GB" // Raises a regexp error.
+	t.Run(item, func(t *testing.T) {
+		_, err := resourceQuantity.Unserialize(item)
+		if err == nil {
+			t.Fatalf("No error returned")
+		}
+	})
 }

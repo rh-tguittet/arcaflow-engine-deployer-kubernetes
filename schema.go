@@ -1,13 +1,13 @@
 package kubernetes
 
 import (
-	"k8s.io/apimachinery/pkg/api/resource"
 	"regexp"
 	"time"
 
 	"go.flow.arcalot.io/kubernetesdeployer/util"
 	"go.flow.arcalot.io/pluginsdk/schema"
 	v1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -860,43 +860,7 @@ var containerSecurityContextProperty = schema.NewPropertySchema(
 )
 
 var resourceListTypeProperty = schema.NewPropertySchema(
-	// Validation failed for 'pod' -> 'spec' -> 'pluginContainer' -> 'resources' -> 'limits': Field cannot be set (reflect.Value.Convert: value of type map[string]string cannot be converted to type v1.ResourceList)
 	schema.NewMapSchema(resourceName, resourceQuantity, nil, nil),
-
-	// This complains at runtime that v1.ResourceList isn't a struct (which it isn't)
-	//schema.NewStructMappedObjectSchema[v1.ResourceList](
-	//	"ResourceList",
-	//	map[string]*schema.PropertySchema{
-	//		"cpu": schema.NewPropertySchema(
-	//			resourceQuantity,
-	//			schema.NewDisplayValue(
-	//				schema.PointerTo("Cpu"),
-	//				schema.PointerTo("Cpu limit"),
-	//				nil,
-	//			),
-	//			false,
-	//			nil,
-	//			nil,
-	//			nil,
-	//			nil,
-	//			nil,
-	//		),
-	//		"memory": schema.NewPropertySchema(
-	//			resourceQuantity,
-	//			schema.NewDisplayValue(
-	//				schema.PointerTo("Memory"),
-	//				schema.PointerTo("Memory limit"),
-	//				nil,
-	//			),
-	//			false,
-	//			nil,
-	//			nil,
-	//			nil,
-	//			nil,
-	//			nil,
-	//		),
-	//	},
-	//),
 	schema.NewDisplayValue(
 		schema.PointerTo("ResourceList"),
 		schema.PointerTo(
@@ -2509,23 +2473,6 @@ var topologyKey = schema.NewStringSchema(
 	regexp.MustCompile(`^(|[a-zA-Z0-9]+(|[-_./][a-zA-Z0-9]+)*[a-zA-Z0-9])$`),
 )
 
-var resourceRequirementName = schema.NewStringEnumSchema(
-	map[string]*schema.DisplayValue{
-		"limits": {
-			NameValue: schema.PointerTo("Limits"),
-			DescriptionValue: schema.PointerTo("Limits describes the maximum amount of compute resources allowed." +
-				"More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"),
-		},
-		"requests": {
-			NameValue: schema.PointerTo("Requests"),
-			DescriptionValue: schema.PointerTo("Requests describes the minimum amount of compute resources required." +
-				"If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise " +
-				"to an implementation-defined value. Requests cannot exceed Limits." +
-				"More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"),
-		},
-		// TODO "claims" but it's more involved
-	},
-)
 var resourceName = schema.NewTypedStringEnumSchema[v1.ResourceName](
 	map[v1.ResourceName]*schema.DisplayValue{
 		v1.ResourceCPU: schema.NewDisplayValue(
@@ -2551,22 +2498,25 @@ var resourceName = schema.NewTypedStringEnumSchema[v1.ResourceName](
 	},
 )
 
-var resourceQuantity = schema.NewStructMappedObjectSchema[resource.Quantity](
+var resourceQuantity = schema.NewObjectSchemaWithUnserializeHook(
 	"Resource Quantity",
 	map[string]*schema.PropertySchema{
-		"Format": schema.NewPropertySchema(
-			schema.NewStringSchema(nil, nil, regexp.MustCompile(`^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$`)),
+		"": schema.NewPropertySchema(
+			schema.NewStringSchema(nil, nil, nil),
 			schema.NewDisplayValue(
-				schema.PointerTo("Format"),
-				schema.PointerTo("Change Format at will. See the comment for Canonicalize for more details."),
+				schema.PointerTo("Resource Quantity"),
+				schema.PointerTo("Resource Quantity"),
 				nil,
 			),
-			false,
+			true,
 			nil,
 			nil,
 			nil,
 			nil,
 			nil,
 		),
+	},
+	func(rawData map[string]any) (any, error) {
+		return resource.ParseQuantity(rawData[""].(string))
 	},
 )
